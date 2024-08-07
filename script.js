@@ -63,17 +63,15 @@ function moveBall() {
             platforms.splice(index, 1);
         }
 
-        // Ajusta a colisão da bolinha com as plataformas, principalmente para dispositivos móveis
+        // Ajusta a colisão da bolinha com as plataformas
         if (
             ballY + ball.clientHeight > parseInt(platform.style.top) &&
-            ballY + ball.clientHeight < parseInt(platform.style.top) + platform.clientHeight &&
+            ballY < parseInt(platform.style.top) + platform.clientHeight &&
             ballX + ball.clientWidth > parseInt(platform.style.left) &&
             ballX < parseInt(platform.style.left) + platform.clientWidth
         ) {
-            // Ajusta a posição da bolinha para não passar por cima das plataformas
-            if (ballY < parseInt(platform.style.top) + platform.clientHeight) {
-                ballY = parseInt(platform.style.top) - ball.clientHeight;
-            }
+            ballY = parseInt(platform.style.top) - ball.clientHeight;
+            ballSpeedY = Math.max(ballSpeedY, 2); // Garante que a bolinha não passe rapidamente
         }
     });
 
@@ -187,7 +185,7 @@ function startMovingBall(direction) {
         moveInterval = setInterval(() => {
             if (moveDirection === 'left') moveBallLeftMobile();
             if (moveDirection === 'right') moveBallRightMobile();
-        }, 20);
+        }, 30); // Aumenta o intervalo para desacelerar a movimentação
     }
 }
 
