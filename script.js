@@ -29,6 +29,7 @@ let seconds = 0;
 let selectedColor = 'red';
 let moveDirection = null;
 let moveInterval;
+let mobileBallSpeedX = 3; // Velocidade lateral para dispositivos móveis
 
 function createPlatform(y) {
     const platform = document.createElement('div');
@@ -81,6 +82,14 @@ function moveBallLeft() {
 
 function moveBallRight() {
     if (ballX < window.innerWidth - ball.clientWidth) ballX += ballSpeedX;
+}
+
+function moveBallLeftMobile() {
+    if (ballX > 0) ballX -= mobileBallSpeedX;
+}
+
+function moveBallRightMobile() {
+    if (ballX < window.innerWidth - ball.clientWidth) ballX += mobileBallSpeedX;
 }
 
 function updateTimer() {
@@ -166,8 +175,8 @@ function startMovingBall(direction) {
     moveDirection = direction;
     if (!moveInterval) {
         moveInterval = setInterval(() => {
-            if (moveDirection === 'left') moveBallLeft();
-            if (moveDirection === 'right') moveBallRight();
+            if (moveDirection === 'left') moveBallLeftMobile();
+            if (moveDirection === 'right') moveBallRightMobile();
         }, 20);
     }
 }
