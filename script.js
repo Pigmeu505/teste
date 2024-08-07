@@ -75,9 +75,11 @@ function moveBall() {
         }
     });
 
-    // Ajusta o comportamento da bolinha após 1 minuto para dispositivos móveis
-    if (seconds >= 60 && isMobile) {
-        ballSpeedX = mobileBallSpeedX; // Reduz a velocidade lateral
+    // Ajusta a movimentação da bolinha após 1 minuto
+    if (seconds >= 60) {
+        if (isMobile) {
+            ballSpeedX = mobileBallSpeedX; // Reduz a velocidade lateral
+        }
     }
 
     ball.style.top = `${ballY}px`;
