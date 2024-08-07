@@ -18,6 +18,7 @@ let ballX;
 let ballY;
 let ballSpeedY = 2; // Velocidade inicial da bola
 let ballSpeedX = 6; // Velocidade lateral inicial
+let mobileBallSpeedX = 3; // Velocidade lateral para dispositivos móveis
 let platformSpeed = 1; // Velocidade inicial das plataformas
 let platforms = [];
 let gameInterval;
@@ -29,7 +30,7 @@ let seconds = 0;
 let selectedColor = 'red';
 let moveDirection = null;
 let moveInterval;
-let mobileBallSpeedX = 3; // Velocidade lateral para dispositivos móveis
+let isMobile = /Mobi|Android/i.test(navigator.userAgent); // Detectar dispositivos móveis
 
 function createPlatform(y) {
     const platform = document.createElement('div');
@@ -62,15 +63,24 @@ function moveBall() {
             platforms.splice(index, 1);
         }
 
+        // Ajusta a colisão da bolinha com as plataformas, principalmente para dispositivos móveis
         if (
             ballY + ball.clientHeight > parseInt(platform.style.top) &&
             ballY + ball.clientHeight < parseInt(platform.style.top) + platform.clientHeight &&
             ballX + ball.clientWidth > parseInt(platform.style.left) &&
             ballX < parseInt(platform.style.left) + platform.clientWidth
         ) {
-            ballY = parseInt(platform.style.top) - ball.clientHeight;
+            // Ajusta a posição da bolinha para não passar por cima das plataformas
+            if (ballY < parseInt(platform.style.top) + platform.clientHeight) {
+                ballY = parseInt(platform.style.top) - ball.clientHeight;
+            }
         }
     });
+
+    // Ajusta o comportamento da bolinha após 1 minuto para dispositivos móveis
+    if (seconds >= 60 && isMobile) {
+        ballSpeedX = mobileBallSpeedX; // Reduz a velocidade lateral
+    }
 
     ball.style.top = `${ballY}px`;
     ball.style.left = `${ballX}px`;
