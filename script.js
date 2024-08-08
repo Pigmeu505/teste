@@ -32,6 +32,7 @@ let moveDirection = null;
 let moveInterval;
 let isMobile = /Mobi|Android/i.test(navigator.userAgent); // Detectar dispositivos móveis
 
+// Função para criar plataformas
 function createPlatform(y) {
     const platform = document.createElement('div');
     platform.classList.add('platform');
@@ -41,6 +42,7 @@ function createPlatform(y) {
     platforms.push(platform);
 }
 
+// Função para mover a bola e verificar colisões
 function moveBall() {
     ballY += ballSpeedY;
 
@@ -60,7 +62,7 @@ function moveBall() {
 
         if (parseInt(platform.style.top) < -parseInt(platform.style.height)) {
             gameContainer.removeChild(platform);
-            platforms.splice(index, 1);
+            platforms.splice(index, 1); // Remove plataformas fora da tela
         }
 
         // Ajusta a colisão da bolinha com as plataformas
@@ -75,17 +77,16 @@ function moveBall() {
         }
     });
 
-    // Ajusta a movimentação da bolinha após 1 minuto
-    if (seconds >= 60) {
-        if (isMobile) {
-            ballSpeedX = mobileBallSpeedX; // Reduz a velocidade lateral
-        }
+    // Ajusta o comportamento da bolinha após 1 minuto para dispositivos móveis
+    if (seconds >= 60 && isMobile) {
+        ballSpeedX = mobileBallSpeedX; // Reduz a velocidade lateral
     }
 
     ball.style.top = `${ballY}px`;
     ball.style.left = `${ballX}px`;
 }
 
+// Funções para mover a bolinha
 function moveBallLeft() {
     if (ballX > 0) ballX -= ballSpeedX;
 }
@@ -102,6 +103,7 @@ function moveBallRightMobile() {
     if (ballX < window.innerWidth - ball.clientWidth) ballX += mobileBallSpeedX;
 }
 
+// Função para atualizar o timer
 function updateTimer() {
     seconds++;
     const minutes = Math.floor(seconds / 60);
@@ -109,12 +111,14 @@ function updateTimer() {
     timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${displaySeconds.toString().padStart(2, '0')}`;
 }
 
+// Função para aumentar a velocidade conforme o tempo
 function increaseSpeed() {
     ballSpeedY += speedIncrement; // Aumenta a velocidade da bola
     ballSpeedX += speedIncrement; // Aumenta a velocidade lateral da bola
     platformSpeed += speedIncrement; // Aumenta a velocidade das plataformas
 }
 
+// Função para reiniciar o jogo
 function restartGame() {
     ballX = window.innerWidth / 2 - ball.clientWidth / 2;
     ballY = window.innerHeight / 2 - ball.clientHeight / 2;
@@ -140,6 +144,7 @@ function restartGame() {
     gameContainer.style.display = 'block';
 }
 
+// Função para encerrar o jogo
 function endGame() {
     clearInterval(gameInterval);
     clearInterval(timerInterval);
@@ -151,6 +156,7 @@ function endGame() {
     finalTimeElement.textContent = timerElement.textContent;
 }
 
+// Funções de controle de interface
 function handleStartButtonClick() {
     menu.style.display = 'none';
     gameContainer.style.display = 'block';
@@ -181,6 +187,7 @@ function handleOptionsFromGameButtonClick() {
     optionsMenu.style.display = 'block';
 }
 
+// Funções para movimentação da bolinha em dispositivos móveis
 function startMovingBall(direction) {
     moveDirection = direction;
     if (!moveInterval) {
@@ -197,6 +204,7 @@ function stopMovingBall() {
     moveDirection = null;
 }
 
+// Event listeners
 startButton.addEventListener('click', handleStartButtonClick);
 optionsButton.addEventListener('click', handleOptionsButtonClick);
 backButton.addEventListener('click', handleBackButtonClick);
